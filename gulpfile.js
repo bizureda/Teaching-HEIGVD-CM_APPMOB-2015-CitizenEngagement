@@ -6,12 +6,37 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var replace = require('gulp-replace');
 
 var paths = {
   sass: ['./scss/**/*.scss']
 };
 
 gulp.task('default', ['sass']);
+
+function saveConfig(environment) {
+
+  var config = require('./config/' + environment + '.json');
+
+  // Use `constants.js` as the source.
+  gulp.src(['constants.js'])
+
+    // Replace all occurrences of @apiUrl@.
+    .pipe(replace(/@apiUrl@/g, config.apiUrl))
+    .pipe(replace(/@mapboxMapId@/, config.mapboxMapId))
+    .pipe(replace(/@mapboxAccessToken@/, config.mapboxAccessToken))
+
+    // Save the result in www/js.
+    .pipe(gulp.dest('www/js'));
+}
+
+gulp.task('config-development', function(){
+  saveConfig('development');
+});
+
+gulp.task('config-production', function(){
+  saveConfig('production');
+});
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')

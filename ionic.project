@@ -1,4 +1,10 @@
 {
   "name": "citizen",
-  "app_id": ""
+  "app_id": "5c14aa99",
+  "proxies": [
+    {
+      "path": "/api-proxy",
+      "proxyUrl": "https://pure-gorge-1661.herokuapp.com/api"
+    }
+  ]
 }
