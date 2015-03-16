@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constants', "leaflet-directive"])
+angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constants', "leaflet-directive",'citizen.user', 'citizen.issues'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -35,8 +35,6 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
   });
 })
 
-
-
 .config(function($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
@@ -44,6 +42,7 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
   $stateProvider
+
 
     // This is the abstract state for the tabs directive.
     .state('tab', {
@@ -60,15 +59,15 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
 
     // The three next states are for each of the three tabs.
     // The state names start with "tab.", indicating that they are children of the "tab" state.
-    .state('tab.newIssue', {
+    .state('tab.user', {
       // The URL (here "/newIssue") is used only internally with Ionic; you never see it displayed anywhere.
       // In an Angular website, it would be the URL you need to go to with your browser to enter this state.
-      url: '/newIssue',
+      url: '/user',
       views: {
         // The "tab-newIssue" view corresponds to the <ion-nav-view name="tab-newIssue"> directive used in the tabs.html template.
-        'tab-newIssue': {
+        'tab-user': {
           // This defines the template that will be inserted into the directive.
-          templateUrl: 'templates/newIssue.html'
+          templateUrl: 'templates/user.html'
         }
       }
     })
@@ -87,7 +86,8 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
       url: '/issueList',
       views: {
         'tab-issueList': {
-          templateUrl: 'templates/issueList.html'
+          templateUrl: 'templates/issueList.html',
+          controller:'issueListCtrl'
         }
       }
     })
@@ -99,7 +99,7 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
 
   // Define the default state (i.e. the first screen displayed when the app opens).
   $urlRouterProvider.otherwise(function($injector) {
-    $injector.get('$state').go('tab.newIssue'); // Go to the new issue tab by default.
+    $injector.get('$state').go('tab.user'); // Go to the new issue tab by default.
   });
 })
 

@@ -1,5 +1,19 @@
 <ion-view view-title="Issue List">
-  <ion-content>
-    <p>Hello! This is the issue List screen.</p>
-  </ion-content>
+	<ion-content>
+		<ion-list ng-controller="issueListCtrl">
+			<ion-toggle toggle-class="item toggle toggle-balanced">Show all issues on map</ion-toggle>
+			<ion-item ng-repeat="issue in issues" class="item-thumbnail-left">		
+				<img ng-src="{{issue.imageUrl}}">
+				<h2>{{issue.issueType.name | capitalize}}</h2>
+				<p>{{issue.description}}</p>
+				<p style="font-size: small; font-style: italic">Reported by {{issue.owner.name}}</p>
+				<ion-option-button class="button-balanced" ng-click="showOnMap('{{issue.id}}')">
+					Show on map
+				</ion-option-button>
+				<ion-option-button class="button-calm" ng-click="showDetails('{{issue.id}}')">
+					View details
+				</ion-option-button>
+			</ion-item>          
+		</ion-list>
+	</ion-content>
 </ion-view>
