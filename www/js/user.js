@@ -26,7 +26,7 @@ user.controller('userCtrl', function(UserService, $http, apiUrl, $scope){
 user.factory('UserService', function($http, apiUrl){
 	return{
 		getUser:function(){
-			return $http({
+			return $http({ 
 				method: 'GET',
 				url: apiUrl + '/users/'+ currentUserID
 			})
