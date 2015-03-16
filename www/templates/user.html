@@ -15,9 +15,11 @@
     <!-- A banner. Choose an image and save it as www/img/banner.jpg -->
     <div class="row">
 		<h4>Reported issues</h4>
-		<ion-list ng-controller="issueListCtrl">
+    </div>
+    <div class="row">
+		<ion-list ng-controller="userIssueListCtrl">
 			<ion-item ng-repeat="userIssue in userIssues" class="item-thumbnail-left">		
-				<img ng-src="{{issue.imageUrl}}">
+				<img ng-src="{{userIssue.imageUrl}}">
 				<h2>{{userIssue.issueType.name | capitalize}}</h2>
 				<p>{{userIssue.description}}</p>
 				<ion-option-button class="button-balanced" ng-click="showOnMap('{{userIssue.id}}')">

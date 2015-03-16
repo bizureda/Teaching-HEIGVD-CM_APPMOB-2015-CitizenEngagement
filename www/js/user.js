@@ -1,27 +1,10 @@
-var user = angular.module('citizen.user', []);
+var user = angular.module('citizen.user', ['angular-storage']);
 
 
 
-/*
-user.controller('userIssuesCtrl', function(UserService, $http, apiUrl, $scope) {
-	var userIssuesList = UserService.getIssues();
-	
-	userIssuesList.success(function(issues){
-		$scope.userIssue = userIssuesList;
-	});
-	$scope.showOnMap=function(issue){
-		alert("Map "+issue);
-		// Show issue on the map ?!!
-	};
-	$scope.showDetails=function(issue){
-		alert("Details "+issue);
-	};
-});
-*/
-
-user.controller('userCtrl', function(UserService, $http, apiUrl, $scope){
-	var currentUser = UserService.getUser();
-	
+user.controller('userCtrl', function(UserService, $http, apiUrl, store, $scope){
+	var userID=store.get('currentUserId');
+	var currentUser = UserService.getUser(userID);
 	currentUser.success(function(user){
 		$scope.currentUser = user;
 	});
@@ -29,24 +12,13 @@ user.controller('userCtrl', function(UserService, $http, apiUrl, $scope){
 
 user.factory('UserService', function($http, apiUrl){
 	return{
-		getUser:function(){
+		getUser:function(id){
 			return $http({ 
 				method: 'GET',
-				url: apiUrl + '/users/'
+				url: apiUrl + '/users/'+id
 			})
 		}
-/*
-		
-		getIssues:function(){
-			return $http({
-				method: 'GET',
-				url: apiUrl + '/issues',
-				headers: {
-				   'x-sort': 'updatedOn'
-				 }
-			})
-		}
-*/
+
 	}
 });
 user.filter('capitalize',function(){
