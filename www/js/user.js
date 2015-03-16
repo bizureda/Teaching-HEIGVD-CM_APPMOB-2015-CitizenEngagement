@@ -2,8 +2,10 @@ var user = angular.module('citizen.user', []);
 
 
 
+/*
 user.controller('userIssuesCtrl', function(UserService, $http, apiUrl, $scope) {
 	var userIssuesList = UserService.getIssues();
+	
 	userIssuesList.success(function(issues){
 		$scope.userIssue = userIssuesList;
 	});
@@ -15,6 +17,7 @@ user.controller('userIssuesCtrl', function(UserService, $http, apiUrl, $scope) {
 		alert("Details "+issue);
 	};
 });
+*/
 
 user.controller('userCtrl', function(UserService, $http, apiUrl, $scope){
 	var currentUser = UserService.getUser();
@@ -29,18 +32,21 @@ user.factory('UserService', function($http, apiUrl){
 		getUser:function(){
 			return $http({ 
 				method: 'GET',
-				url: apiUrl + '/users/'+ currentUserID
+				url: apiUrl + '/users/'
 			})
-		},
+		}
+/*
+		
 		getIssues:function(){
 			return $http({
 				method: 'GET',
-				url: apiUrl + '/me/issues',
+				url: apiUrl + '/issues',
 				headers: {
 				   'x-sort': 'updatedOn'
 				 }
 			})
 		}
+*/
 	}
 });
 user.filter('capitalize',function(){

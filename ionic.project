@@ -4,7 +4,7 @@
   "proxies": [
     {
       "path": "/api-proxy",
-      "proxyUrl": "https://pure-gorge-1661.herokuapp.com/api"
+      "proxyUrl": "https://mighty-plains-4558.herokuapp.com/api"
     }
   ]
 }
