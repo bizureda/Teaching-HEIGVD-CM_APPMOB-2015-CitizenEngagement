@@ -1,0 +1,29 @@
+<ion-view view-title="User">
+<ion-nav-buttons side="secondary">
+    <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button">Log Out</button>
+  </ion-nav-buttons>
+ <ion-content class="padding">
+ 	<div class="row">
+ 		<div class="col col-25">
+ 			<img src="img/avatar.png" width="100%" alt="Citizen Avatar" />
+ 		</div>
+ 		<div class="col col-75">
+<!--  			<h1>{{user.firstname}} {{user.lastname}} </h1> -->
+				<h3>Quentin de Lattre</h3>
+ 		</div>
+ 	</div>
+
+    <!-- A banner. Choose an image and save it as www/img/banner.jpg -->
+    <div class="row">
+		<h4>Reported issues</h4>
+		<ion-list ng-controller="userListCtrl">
+				<ion-item ng-repeat="userIssue in userIssues" class="item-thumbnail-left">			
+					<img ng-src="{{userIssue.imageUrl}}">
+					<h2>{{userIssue.issueType.name}}</h2>
+					<p>{{userIssue.description}}</p>
+				</ion-item>
+		</ion-list>
+	</div>
+  </ion-content>
+</ion-view>
+

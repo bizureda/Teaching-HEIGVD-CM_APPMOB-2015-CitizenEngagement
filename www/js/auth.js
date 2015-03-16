@@ -110,7 +110,7 @@ angular.module('citizen-engagement.auth', ['angular-storage'])
       // Make the request to retrieve or create the user.
       $http({
         method: 'POST',
-        url: 'http://localhost:8100/api-proxy/users/logister',
+        url: apiUrl + '/users/logister',
         data: $scope.user
       }).success(function(user) {
 
@@ -128,7 +128,7 @@ angular.module('citizen-engagement.auth', ['angular-storage'])
         });
 
         // Go to the issue creation tab.
-        $state.go('tab.newIssue');
+        $state.go('tab.issueMap');
 
       }).error(function() {
 
