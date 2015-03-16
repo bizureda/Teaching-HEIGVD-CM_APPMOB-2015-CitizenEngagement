@@ -3,25 +3,31 @@
     <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button">Log Out</button>
   </ion-nav-buttons>
  <ion-content class="padding">
- 	<div class="row">
+ 	<div class="row" ng-controller="userIssuesCtrl">
  		<div class="col col-25">
  			<img src="img/avatar.png" width="100%" alt="Citizen Avatar" />
  		</div>
  		<div class="col col-75">
-<!--  			<h1>{{user.firstname}} {{user.lastname}} </h1> -->
-				<h3>Quentin de Lattre</h3>
+ 			<h3>{{currentUser.firstname}} {{currentUser.lastname}} </h3>
  		</div>
  	</div>
 
     <!-- A banner. Choose an image and save it as www/img/banner.jpg -->
     <div class="row">
 		<h4>Reported issues</h4>
-		<ion-list ng-controller="userListCtrl">
-				<ion-item ng-repeat="userIssue in userIssues" class="item-thumbnail-left">			
-					<img ng-src="{{userIssue.imageUrl}}">
-					<h2>{{userIssue.issueType.name}}</h2>
-					<p>{{userIssue.description}}</p>
-				</ion-item>
+		<ion-list ng-controller="userIssuesCtrl">
+			<ion-item ng-repeat="userIssue in userIssues" class="item-thumbnail-left">		
+				<img ng-src="{{issue.imageUrl}}">
+				<h2>{{userIssue.issueType.name | capitalize}}</h2>
+				<p>{{userIssue.description}}</p>
+				<p style="font-size: small; font-style: italic">Reported by {{userIssue.owner.name}}</p>
+				<ion-option-button class="button-balanced" ng-click="showOnMap('{{userIssue.id}}')">
+					Show on map
+				</ion-option-button>
+				<ion-option-button class="button-calm" ng-click="showDetails('{{userIssue.id}}')">
+					View details
+				</ion-option-button>
+			</ion-item>          
 		</ion-list>
 	</div>
   </ion-content>

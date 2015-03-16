@@ -5,8 +5,12 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $scope)
 	issueList.success(function(issues){
 		$scope.issues = issues;
 	});
-	$scope.showOnMap=function(item){
-		alert("show "+item);
+	$scope.showOnMap=function(issue){
+		alert("Map "+issue);
+		// Show issue on the map ?!!
+	};
+	$scope.showDetails=function(issue){
+		alert("Details "+issue);
 	};
 });
 issues.factory('IssueService', function($http, apiUrl){
