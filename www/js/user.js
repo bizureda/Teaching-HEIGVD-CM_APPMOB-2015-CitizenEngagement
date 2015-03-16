@@ -1,6 +1,7 @@
 var user = angular.module('citizen.user', []);
 
 
+
 user.controller('userIssuesCtrl', function(UserService, $http, apiUrl, $scope) {
 	var userIssuesList = UserService.getIssues();
 	userIssuesList.success(function(issues){
