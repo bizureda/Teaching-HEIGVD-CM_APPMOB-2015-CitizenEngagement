@@ -23,6 +23,6 @@ user.factory('UserService', function($http, apiUrl){
 });
 user.filter('capitalize',function(){
 	return function(input){
-		return input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+		return  input.charAt(0).toUpperCase() + input.slice(1);
 	}
 });

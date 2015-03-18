@@ -33,12 +33,25 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $st
 
 issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl,$scope, $stateParams){
 	var issueID = $stateParams.issueId;
-	$scope.issueId = issueID;
 	
 	var issueDetails = IssueService.getIssue(issueID);
 	issueDetails.success(function(issueDetails){
 		$scope.issueDetails = issueDetails;
+		$scope.tags=issueDetails.tags;
+		$scope.comments=issueDetails.comments;
 	});
+	
+	
+	$scope.addComment=function(newComment){
+		var commentTxt=$scope.newComment;
+		
+		var postComment = IssueService.postComment(issueID, commentTxt);
+		postComment.success(function(issue){
+			$scope.newComment=null;
+			$scope.comments=issue.comments;
+		});
+	}
+	
 });
 
 issues.factory('IssueService', function($http, apiUrl){
@@ -46,7 +59,10 @@ issues.factory('IssueService', function($http, apiUrl){
 		getIssue:function(id){
 			return $http({
 				method: 'GET',
-				url: apiUrl + '/issues/'+id
+				url: apiUrl + '/issues/'+id,
+				headers: {
+				   'x-sort': 'postedOn'
+				 }
 			})
 		},
 		getIssues:function(){
@@ -66,11 +82,28 @@ issues.factory('IssueService', function($http, apiUrl){
 				   'x-sort': 'updatedOn'
 				 }
 			})
+		},
+		postComment:function(id, txt){
+			return $http({
+				method: 'POST',
+				url: apiUrl+'/issues/'+id+'/actions',
+				data: {
+					"type":"comment",
+					"payload":{
+						"text":txt
+					}
+				}
+			})
 		}
 	}
 });
 issues.filter('capitalize',function(){
 	return function(input){
-		return input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+		return  input.charAt(0).toUpperCase() + input.slice(1);
+	}
+});
+issues.filter('date',function(){
+	return function(input){
+		return  input.slice(0,10);
 	}
 });

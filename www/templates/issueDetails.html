@@ -1,5 +1,61 @@
 <ion-view view-title="Issue Details">
-  <ion-content ng-controller="IssueDetailsController">
-    <p>Hello! This is the issue details screen.</p>
-  </ion-content>
+	<ion-content class="padding" ng-controller="IssueDetailsController">
+		<div class="row" ng-if="issueDetails">
+			<div class="col col-30">
+				<img ng-src="{{issueDetails.imageUrl}}" width="100%" alt="{{issueDetails.description}}" />
+			</div>
+			<div class="col col-70">
+				<h3>{{issueDetails.issueType.name | capitalize}}</h3>
+				<p style="font-size: small; font-style: italic">Reported by {{issueDetails.owner.name}}</p>
+				<p style="font-size: small; font-style: italic">Last update:  {{issueDetails.updatedOn | date}}</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<div class="tag" ng-repeat="tag in tags">
+					{{tag}}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<h3>Comments</h3>
+			</div>
+		</div>
+		
+		
+		
+		
+		<div class="row">
+			<div class="col">
+				<form name="commentForm">
+					<div class="list">
+						<label class="item item-input">
+							<input type="text" placeholder="Comment" ng-model="newComment" required="required"/>
+						</label>
+						<p ng-if="error" class="error">{{ error }}</p>
+						<button class="button button-small button-full button-positive" ng-click="addComment()" ng-disabled="commentForm.$invalid">Add comment</button>
+					
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		
+		
+		
+		
+		
+		<div class="row">
+			<div class="col">
+				<ion-list>
+					<ion-item ng-repeat="comment in comments | orderBy:'-postedOn'" class="item item-avatar comment">
+						<img ng-src="img/avatar.png" alt="{{comment.author.name}}" />
+						<h3>{{comment.author.name}}<span class="commentDate">&nbsp;&nbsp;{{comment.postedOn | date}}</span></h3>
+						<p>{{comment.text}}</p>
+					</ion-item>
+				</ion-list>
+			</div>
+		</div>
+	</ion-content>
 </ion-view>
