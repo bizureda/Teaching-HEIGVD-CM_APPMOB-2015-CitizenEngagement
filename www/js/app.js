@@ -71,6 +71,19 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
         }
       }
     })
+    .state('tab.userIssueDetails', {
+      // We use a parameterized route for this state.
+      // That way we'll know which issue to display the details of.
+      url: '/userIssueDetails/:issueId',
+      views: {
+        // Here we use the same "tab-issueList" view as the previous state.
+        // This means that the issue details template will be displayed in the same tab as the issue list.
+        'tab-user': {
+          templateUrl: 'templates/issueDetails.html'
+//           controller:'issueDetailCtrl'
+        }
+      }
+    })
 
     .state('tab.issueMap', {
       url: '/issueMap',
@@ -92,7 +105,20 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
       }
     })
 
-   
+   // This is the issue details state.
+    .state('tab.issueDetails', {
+      // We use a parameterized route for this state.
+      // That way we'll know which issue to display the details of.
+      url: '/issueDetails/:issueId',
+      views: {
+        // Here we use the same "tab-issueList" view as the previous state.
+        // This means that the issue details template will be displayed in the same tab as the issue list.
+        'tab-issueList': {
+          templateUrl: 'templates/issueDetails.html'
+//           controller:'issueDetailCtrl'
+        }
+      }
+    })
    
 
   ;

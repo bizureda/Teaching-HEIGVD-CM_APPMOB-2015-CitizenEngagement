@@ -1,7 +1,9 @@
 <ion-view view-title="Issue List">
 	<ion-content>
 		<ion-list ng-controller="issueListCtrl">
-			<ion-toggle toggle-class="item toggle toggle-balanced">Show all issues on map</ion-toggle>
+			<ion-toggle ng-model="blublub" toggle-class="toggle-balanced">
+				Show all issues on map
+			</ion-toggle>
 			<ion-item ng-repeat="issue in issues" class="item-thumbnail-left">		
 				<img ng-src="{{issue.imageUrl}}">
 				<h2>{{issue.issueType.name | capitalize}}</h2>
