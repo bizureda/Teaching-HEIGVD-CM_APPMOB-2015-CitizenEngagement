@@ -31,13 +31,24 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $st
 	};
 });
 
-issues.controller("IssueDetailsController", function($scope, $stateParams){
-	$scope.issueId = $stateParams.issueId;
-	console.log($stateParams.issueId);
+issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl,$scope, $stateParams){
+	var issueID = $stateParams.issueId;
+	$scope.issueId = issueID;
+	
+	var issueDetails = IssueService.getIssue(issueID);
+	issueDetails.success(function(issueDetails){
+		$scope.issueDetails = issueDetails;
+	});
 });
 
 issues.factory('IssueService', function($http, apiUrl){
 	return{
+		getIssue:function(id){
+			return $http({
+				method: 'GET',
+				url: apiUrl + '/issues/'+id
+			})
+		},
 		getIssues:function(){
 			return $http({
 				method: 'GET',
