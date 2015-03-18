@@ -4,24 +4,7 @@ angular.module('citizen-engagement.map', ['citizen.issues'])
 .controller("MapController", function(mapboxMapId, mapboxAccessToken, IssueService, $http, apiUrl, $state, $scope, $stateParams) {
            
 
- 
-            // Show an issue sur la map depuis la liste des issues           
-
-            
-            // var issueID = $stateParams.issueId;
-            // IssueService.getIssue(issueID).success(function(data){
-            //   var crd = data;
-            //   console.log(crd); 
-            //   $scope.mapCenter = {
-            //       lat: crd.lat,
-            //       lng: crd.lng,
-            //       zoom: 20,
-            //     };
-            //   $scope.mapMarkers.push({
-            //         lat: crd.lat,
-            //         lng: crd.lng
-            //       })
-            // });
+           
 
              
             
@@ -54,6 +37,9 @@ angular.module('citizen-engagement.map', ['citizen.issues'])
                 mypos(pos);
               };  
             };
+
+            
+
 
 
             // geolocation la position de l'utilisateur.
@@ -106,4 +92,26 @@ angular.module('citizen-engagement.map', ['citizen.issues'])
                 } 
               });
             };
+
+
+             // Show an issue sur la map depuis la liste des issues           
+            $scope.$on('$ionicView.beforeEnter', function() {
+             var issueID = $stateParams.issueId;
+
+             if (issueID){
+             IssueService.getIssue(issueID).success(function(data){
+              var crd = data;
+              
+              $scope.mapCenter = {
+                  lat: crd.lat,
+                  lng: crd.lng,
+                  zoom: 15,
+                };
+              $scope.mapMarkers.push({
+                    lat: crd.lat,
+                    lng: crd.lng
+                  })
+            });
+           };
+          });
     })

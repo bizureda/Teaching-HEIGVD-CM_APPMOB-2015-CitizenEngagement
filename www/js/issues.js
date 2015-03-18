@@ -9,6 +9,7 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 	$scope.showOnMap=function(issue){
 
 		$state.go("tab.issueMap", { issueId: issue });
+		
 	};
 	$scope.showDetails=function(issue){
 		$state.go("tab.issueDetails", { issueId: issue });
@@ -24,7 +25,7 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $st
 	});
 	
 	$scope.showOnMap=function(issue){
-		// Show issue on the map ?!!
+		$state.go("tab.issueMap", { issueId: issue });
 	};
 	$scope.showDetails=function(issue){
 		$state.go("tab.userIssueDetails", { issueId: issue });
