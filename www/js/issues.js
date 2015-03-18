@@ -31,6 +31,11 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $st
 	};
 });
 
+issues.controller("IssueDetailsController", function($scope, $stateParams){
+	$scope.issueId = $stateParams.issueId;
+	console.log($stateParams.issueId);
+});
+
 issues.factory('IssueService', function($http, apiUrl){
 	return{
 		getIssues:function(){
