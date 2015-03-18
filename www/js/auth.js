@@ -54,7 +54,7 @@ angular.module('citizen-engagement.auth', ['angular-storage'])
       // Re-initialize the user object every time the screen is displayed.
       // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
       $scope.user = {};
-    });
+    });                         
 
     // Add the register function to the scope.
     $scope.register = function() {
