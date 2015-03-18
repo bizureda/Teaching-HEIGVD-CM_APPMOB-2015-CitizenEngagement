@@ -1,21 +1,21 @@
 var issues = angular.module('citizen.issues', []);
 
-issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $scope) {
+issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
 	var issueList = IssueService.getIssues();
 	issueList.success(function(issues){
 		$scope.issues = issues;
 	});
 	
 	$scope.showOnMap=function(issue){
-		alert("Map "+issue);
+// 		alert("Map "+issue);
 		// Show issue on the map ?!!
 	};
 	$scope.showDetails=function(issue){
-		alert("Details "+issue);
+		$state.go("tab.issueDetails", { issueId: issue });
 	};
 });
 
-issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $scope) {
+issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
 	var userIssueList = IssueService.getUserIssues();
 
 	userIssueList.success(function(issues){
@@ -24,11 +24,10 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $sc
 	});
 	
 	$scope.showOnMap=function(issue){
-		alert("Map "+issue);
 		// Show issue on the map ?!!
 	};
 	$scope.showDetails=function(issue){
-		alert("Details "+issue);
+		$state.go("tab.userIssueDetails", { issueId: issue });
 	};
 });
 
