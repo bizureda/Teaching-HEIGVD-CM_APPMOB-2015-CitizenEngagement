@@ -19,7 +19,7 @@
 				<h2>{{issue.issueType.name | capitalize}}</h2>
 				<p>{{issue.description}}</p>
 				<p style="font-size: small; font-style: italic">Reported by {{issue.owner.name}}</p>
-				<ion-option-button class="button-balanced" ng-click="showOnMap('{{issue.id}}')">
+				<ion-option-button class="button-balanced" ng-controller="MapController" ng-click="showOnMap('{{issue.id}}')">
 					Show on map
 				</ion-option-button>
 				<ion-option-button class="button-calm" ng-click="showDetails('{{issue.id}}')">

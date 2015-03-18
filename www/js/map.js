@@ -1,11 +1,35 @@
 
 angular.module('citizen-engagement.map', ['citizen.issues'])
 
-.controller("MapController", function(mapboxMapId, mapboxAccessToken, IssueService, $http, apiUrl, $state, $scope) {
+.controller("MapController", function(mapboxMapId, mapboxAccessToken, IssueService, $http, apiUrl, $state, $scope, $stateParams) {
+           
+
+ 
+            // Show an issue sur la map depuis la liste des issues           
+
             
+            // var issueID = $stateParams.issueId;
+            // IssueService.getIssue(issueID).success(function(data){
+            //   var crd = data;
+            //   console.log(crd); 
+            //   $scope.mapCenter = {
+            //       lat: crd.lat,
+            //       lng: crd.lng,
+            //       zoom: 20,
+            //     };
+            //   $scope.mapMarkers.push({
+            //         lat: crd.lat,
+            //         lng: crd.lng
+            //       })
+            // });
+
+             
+            
+
             var issueList;
             var top = false;
-              
+
+            // Fonction qui permet d'afficher et de cacher les markers
             $scope.allMarkers = function() {
 
               if (top == true) {
@@ -32,7 +56,7 @@ angular.module('citizen-engagement.map', ['citizen.issues'])
             };
 
 
-
+            // geolocation la position de l'utilisateur.
               navigator.geolocation.getCurrentPosition(success, error, options);
 
               var options = {
@@ -70,19 +94,16 @@ angular.module('citizen-engagement.map', ['citizen.issues'])
               };
               $scope.mapMarkers = [];
 
+            // cération du marker pour notre position.
             function mypos(pos) {
               var crd = pos.coords;
               $scope.mapMarkers.push({
               lat: crd.latitude,
               lng: crd.longitude,
-              icon : {
-                iconUrl : "../img/avatar.png",
-                iconSize : [20, 20],
-                
-
-
-              }
+                icon : {
+                  iconUrl : "../img/avatar.png",
+                  iconSize : [20, 20],
+                } 
               });
             };
-         
     })

@@ -96,7 +96,7 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
     })
 
     .state('tab.issueMap', {
-      url: '/issueMap',
+      url: '/issueMap?issueId',
       views: {
         'tab-issueMap': {
           templateUrl: 'templates/issueMap.html', 
