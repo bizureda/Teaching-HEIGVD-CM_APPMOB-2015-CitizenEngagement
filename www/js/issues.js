@@ -51,7 +51,6 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 			$scope.comments=issue.comments;
 		});
 	}
-	
 });
 
 issues.factory('IssueService', function($http, apiUrl){

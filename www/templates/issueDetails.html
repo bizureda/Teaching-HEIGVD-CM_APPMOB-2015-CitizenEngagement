@@ -2,7 +2,7 @@
 	<ion-content class="padding" ng-controller="IssueDetailsController">
 		<div class="row" ng-if="issueDetails">
 			<div class="col col-30">
-				<img ng-src="{{issueDetails.imageUrl}}" width="100%" alt="{{issueDetails.description}}" />
+				<img ng-src="{{issueDetails.imageUrl}}" fall-back-src="img/3DflatCity.png" width="100%" alt="{{issueDetails.description}}" />
 			</div>
 			<div class="col col-70">
 				<h3>{{issueDetails.issueType.name | capitalize}}</h3>
@@ -22,10 +22,6 @@
 				<h3>Comments</h3>
 			</div>
 		</div>
-		
-		
-		
-		
 		<div class="row">
 			<div class="col">
 				<form name="commentForm">
@@ -40,12 +36,6 @@
 				</form>
 			</div>
 		</div>
-		
-		
-		
-		
-		
-		
 		<div class="row">
 			<div class="col">
 				<ion-list>
