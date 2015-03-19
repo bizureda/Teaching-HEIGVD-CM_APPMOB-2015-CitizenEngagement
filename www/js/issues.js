@@ -1,10 +1,24 @@
 var issues = angular.module('citizen.issues', []);
 issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
-	var issueList = IssueService.getIssues();
+	$scope.page = 0;
+	var issueList = IssueService.getIssues($scope.page);
 	issueList.success(function(issues) {
 		$scope.issues = issues;
 		$scope.listLoaded = true;
+		$scope.page++;
 	});
+	$scope.noMoreItemsAvailable = false;
+	$scope.loadMore = function() {
+		var issueList = IssueService.getIssues($scope.page);
+		issueList.success(function(issues) {
+			if(issues.length<10){
+				$scope.noMoreItemsAvailable=true;
+			}
+			$scope.issues = $scope.issues.concat(issues);
+			$scope.$broadcast('scroll.infiniteScrollComplete');
+			$scope.page++;
+		});
+	};
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
 		$scope.issueTypes = issueTypes;
@@ -27,33 +41,32 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 	};
 	$scope.setOrder = function(order) {
 		$scope.order = order;
-		console.log($scope.order);
 	};
 	$scope.togRecent = function(ord) {
 		$scope.ownerOrd = '';
 		$scope.stateOrd = '';
 		if ($scope.reverse) {
-			$scope.recentOrd = 'ion-chevron-up'
-		} else {
 			$scope.recentOrd = 'ion-chevron-down'
+		} else {
+			$scope.recentOrd = 'ion-chevron-up'
 		}
 	};
 	$scope.togOwner = function(ord) {
 		$scope.recentOrd = '';
 		$scope.stateOrd = '';
 		if ($scope.reverse) {
-			$scope.ownerOrd = 'ion-chevron-up'
-		} else {
 			$scope.ownerOrd = 'ion-chevron-down'
+		} else {
+			$scope.ownerOrd = 'ion-chevron-up'
 		}
 	};
 	$scope.togState = function(ord) {
 		$scope.recentOrd = '';
 		$scope.ownerOrd = '';
 		if ($scope.reverse) {
-			$scope.stateOrd = 'ion-chevron-up'
-		} else {
 			$scope.stateOrd = 'ion-chevron-down'
+		} else {
+			$scope.stateOrd = 'ion-chevron-up'
 		}
 	};
 });
@@ -83,7 +96,6 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
-		console.log(issueTypes);
 		$scope.issueTypes = issueTypes;
 	});
 
@@ -129,10 +141,30 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 
 
 issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
-	var userIssueList = IssueService.getUserIssues();
+	$scope.page = 0;
+	var userIssueList = IssueService.getUserIssues($scope.page);
 	userIssueList.success(function(issues) {
-		$scope.userIssues = issues;
+		if(issues.length==0){
+			$scope.noMoreItemsAvailable=true;
+			$scope.userIssues = false;
+		}else{
+			$scope.userIssues = issues;
+		}
 	});
+	$scope.noMoreItemsAvailable = false;
+	$scope.loadMore = function() {
+		var userIssueList = IssueService.getUserIssues($scope.page);
+		userIssueList.success(function(issues) {
+			if(issues.length<10){
+				$scope.noMoreItemsAvailable=true;
+			}
+			$scope.userIssues = issues;
+			$scope.userIssues = $scope.userIssues.concat(issues);
+			$scope.$broadcast('scroll.infiniteScrollComplete');
+			$scope.page++;
+			
+		});
+	};
 	$scope.showOnMap = function(issue) {
 		$state.go("tab.issueMap", {
 			issueId: issue
@@ -168,8 +200,33 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 	}
 });
 
+issues.directive('actualSrc', function() {
+	return {
+		link: function postLink(scope, element, attrs) {
+			attrs.$observe('actualSrc', function(newVal, oldVal) {
+				if (newVal != undefined) {
+					var img = new Image();
+					img.src = attrs.actualSrc;
+					angular.element(img).bind('load', function() {
+						element.attr("src", attrs.actualSrc);
+					});
+				}
+			});
+		}
+	}
+});
+
 issues.factory('IssueService', function($http, apiUrl) {
 	return {
+		getIssues: function(p) {
+			return $http({
+				method: 'GET',
+				url: apiUrl + '/issues',
+				headers: {
+					'x-pagination': p + ';10'
+				}
+			})
+		},
 		getIssue: function(id) {
 			return $http({
 				method: 'GET',
@@ -179,27 +236,19 @@ issues.factory('IssueService', function($http, apiUrl) {
 				}
 			})
 		},
-		getIssues: function() {
-			return $http({
-				method: 'GET',
-				url: apiUrl + '/issues',
-				headers: {
-					'x-sort': 'updatedOn'
-				}
-			})
-		},
 		getIssueTypes: function() {
 			return $http({
 				method: 'GET',
 				url: apiUrl + '/issueTypes'
 			})
 		},
-		getUserIssues: function() {
+		getUserIssues: function(p) {
 			return $http({
 				method: 'GET',
 				url: apiUrl + '/me/issues',
 				headers: {
-					'x-sort': 'updatedOn'
+					'x-sort': 'updatedOn',
+					'x-pagination': p + ';10'
 				}
 			})
 		},

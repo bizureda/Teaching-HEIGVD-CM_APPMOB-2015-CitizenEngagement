@@ -35,15 +35,7 @@ angular.module('citizen', ['ionic', 'citizen-engagement.auth', 'citizen.constant
   });
 })
 
-.directive('fallbackSrc', function () {
-    return{
-        link: function postLink(scope, element, attrs) {
-            element.bind('error', function () {
-                angular.element(this).attr("src", attrs.fallbackSrc);
-            });
-        }
-    }
-})
+
 
 .config(function($stateProvider, $urlRouterProvider) {
 

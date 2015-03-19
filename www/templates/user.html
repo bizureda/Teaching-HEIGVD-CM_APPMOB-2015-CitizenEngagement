@@ -17,10 +17,10 @@
     <div class="row">
 		<h4>Reported issues</h4>
     </div>
-    <div class="row">
-		<ion-list ng-controller="userIssueListCtrl">
+    <div class="row" ng-controller="userIssueListCtrl">
+		<ion-list ng-if="userIssues">
 			<ion-item ng-repeat="userIssue in userIssues" class="item-thumbnail-left">		
-				<img ng-src="{{userIssue.imageUrl}}" fall-back-src="img/3DflatCity.png">
+				<img actual-src="{{userIssue.imageUrl}}" ng-src="img/3DflatCity.png">
 				<h2>{{userIssue.issueType.name | capitalize}}</h2>
 				<p>{{userIssue.description}}</p>
 				<ion-option-button class="button-balanced" ng-click="showOnMap('{{userIssue.id}}')">
@@ -30,7 +30,13 @@
 					View details
 				</ion-option-button>
 			</ion-item>
+			<ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
 		</ion-list>
+		<div ng-if="!userIssues" class="card">
+			<div class="item item-text-wrap">
+				You haven't reported any issues yet. Too bad...
+			</div>
+		</div>
 	</div>
   </ion-content>
 </ion-view>
