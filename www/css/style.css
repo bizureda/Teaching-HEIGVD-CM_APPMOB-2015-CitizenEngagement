@@ -29,3 +29,9 @@
 .leaflet-control-container{
 	display: none;
 }
+.list-filter{
+	margin-right: 1vw;
+}
+.list-filter:last-child{
+	margin:0;
+}

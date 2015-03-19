@@ -14,6 +14,47 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 	$scope.showDetails=function(issue){
 		$state.go("tab.issueDetails", { issueId: issue });
 	};
+	
+	$scope.clear=function(){
+		$scope.ownerOrd = '';
+	    $scope.stateOrd = '';
+	    $scope.recentOrd = '';
+	    $scope.predicate = null;
+	};
+	
+	$scope.setOrder = function (order) {
+        $scope.order = order;
+        console.log($scope.order);
+    };
+    
+    $scope.togRecent=function(ord){
+	    $scope.ownerOrd = '';
+	    $scope.stateOrd = '';
+	    if($scope.reverse){
+		    $scope.recentOrd='ion-chevron-up'
+	    }else{
+	    	$scope.recentOrd='ion-chevron-down'
+	    }
+    };
+    $scope.togOwner=function(ord){
+	    $scope.recentOrd = '';
+	    $scope.stateOrd = '';
+	    if($scope.reverse){
+		    $scope.ownerOrd='ion-chevron-up'
+	    }else{
+	    	$scope.ownerOrd='ion-chevron-down'
+	    }
+    };
+    $scope.togState=function(ord){
+	    $scope.recentOrd = '';
+	    $scope.ownerOrd = '';
+	    if($scope.reverse){
+		    $scope.stateOrd='ion-chevron-up'
+	    }else{
+	    	$scope.stateOrd='ion-chevron-down'
+	    }
+    };
+	
 });
 
 issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
