@@ -1,18 +1,19 @@
 var issues = angular.module('citizen.issues', []);
 issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
-	$scope.page=0;
+	$scope.page = 0;
 	var issueList = IssueService.getIssues($scope.page);
 	issueList.success(function(issues) {
 		$scope.issues = issues;
 		$scope.listLoaded = true;
-
 		$scope.page++;
 	});
 	$scope.noMoreItemsAvailable = false;
-	$scope.loadMore=function(){
+	$scope.loadMore = function() {
 		var issueList = IssueService.getIssues($scope.page);
 		issueList.success(function(issues) {
-
+			if(issues.length<10){
+				$scope.noMoreItemsAvailable=true;
+			}
 			$scope.issues = $scope.issues.concat(issues);
 			$scope.$broadcast('scroll.infiniteScrollComplete');
 			$scope.page++;
@@ -40,7 +41,6 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 	};
 	$scope.setOrder = function(order) {
 		$scope.order = order;
-
 	};
 	$scope.togRecent = function(ord) {
 		$scope.ownerOrd = '';
@@ -73,7 +73,6 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, apiUrl, $state, $scope) {
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
-
 		$scope.issueTypes = issueTypes;
 	});
 /*
@@ -88,19 +87,28 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 */
 });
 issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
-	$scope.page=0;
+	$scope.page = 0;
 	var userIssueList = IssueService.getUserIssues($scope.page);
 	userIssueList.success(function(issues) {
-		$scope.userIssues = issues;
+		if(issues.length==0){
+			$scope.noMoreItemsAvailable=true;
+			$scope.userIssues = false;
+		}else{
+			$scope.userIssues = issues;
+		}
 	});
 	$scope.noMoreItemsAvailable = false;
-	$scope.loadMore=function(){
+	$scope.loadMore = function() {
 		var userIssueList = IssueService.getUserIssues($scope.page);
 		userIssueList.success(function(issues) {
-
+			if(issues.length<10){
+				$scope.noMoreItemsAvailable=true;
+			}
+			$scope.userIssues = issues;
 			$scope.userIssues = $scope.userIssues.concat(issues);
 			$scope.$broadcast('scroll.infiniteScrollComplete');
 			$scope.page++;
+			
 		});
 	};
 	$scope.showOnMap = function(issue) {
@@ -131,21 +139,20 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 		});
 	}
 });
-issues.directive('actualSrc', function () {
-    return{
-        link: function postLink(scope, element, attrs) {
-            attrs.$observe('actualSrc', function(newVal, oldVal){
-                 if(newVal != undefined){
-                     var img = new Image();
-                     img.src = attrs.actualSrc;
-                     angular.element(img).bind('load', function () {
-                         element.attr("src", attrs.actualSrc);
-                     });
-                 }
-            });
-
-        }
-    }
+issues.directive('actualSrc', function() {
+	return {
+		link: function postLink(scope, element, attrs) {
+			attrs.$observe('actualSrc', function(newVal, oldVal) {
+				if (newVal != undefined) {
+					var img = new Image();
+					img.src = attrs.actualSrc;
+					angular.element(img).bind('load', function() {
+						element.attr("src", attrs.actualSrc);
+					});
+				}
+			});
+		}
+	}
 });
 issues.factory('IssueService', function($http, apiUrl) {
 	return {
@@ -154,7 +161,7 @@ issues.factory('IssueService', function($http, apiUrl) {
 				method: 'GET',
 				url: apiUrl + '/issues',
 				headers: {
-					'x-pagination': p+';10'
+					'x-pagination': p + ';10'
 				}
 			})
 		},
@@ -179,7 +186,7 @@ issues.factory('IssueService', function($http, apiUrl) {
 				url: apiUrl + '/me/issues',
 				headers: {
 					'x-sort': 'updatedOn',
-					'x-pagination': p+';10'
+					'x-pagination': p + ';10'
 				}
 			})
 		},
