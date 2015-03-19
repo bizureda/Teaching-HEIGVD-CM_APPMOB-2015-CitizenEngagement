@@ -1,0 +1,14 @@
+<ion-popover-view view-title="New Issue">
+	<ion-content>
+		<form name="issueForm">
+			<div class="list">
+				<label class="item item-input">
+					<input type="text" placeholder="Blu" ng-model="newComment" required="required"/>
+				</label>
+				<p ng-if="error" class="error">{{ error }}</p>
+				<button class="button button-small button-full button-positive" ng-click="addComment()" ng-disabled="commentForm.$invalid">Add comment</button>
+			
+			</div>
+		</form>
+	</ion-content>
+</ion-popover-view>

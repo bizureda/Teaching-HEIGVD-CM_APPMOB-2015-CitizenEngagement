@@ -1,10 +1,10 @@
 <ion-view view-title="Issue Map">
 
 <ion-nav-buttons side="primary">
-  	<button ng-click="allMarkers()" class="showMarkers button button-icon icon ion-ios-location-outline"></button>
+  	<button ng-click="allMarkers()" class="showMarkers {{markerClass}} button button-icon icon ion-ios-location-outline"></button>
   </ion-nav-buttons>
 <ion-nav-buttons side="secondary">
-  	<a class="addIssue button button-icon icon ion-ios-plus-outline"></a>
+  	<a  class="addIssue button button-icon icon ion-ios-plus-outline" ng-click="popover.show($event)"></a>
   </ion-nav-buttons>
 
 
@@ -19,7 +19,8 @@
 
     <a class="button button-icon icon ion-plus col col-center"></a>
   </div>  
- -->
-  
+-->
+
+
   </ion-content>
 </ion-view>

@@ -29,9 +29,17 @@
 .leaflet-control-container{
 	display: none;
 }
+.button-bar .button i.icon:before{
+	line-height: 19px;
+	padding-left: 1vw;
+	font-size: 10px;
+}
+/*
+
 .list-filter{
 	margin-right: 1vw;
 }
 .list-filter:last-child{
 	margin:0;
 }
+*/
