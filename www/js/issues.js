@@ -57,23 +57,77 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 		}
 	};
 });
-issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, apiUrl, $state, $scope) {
+
+
+
+issues.factory("CameraService", function($q) {
+	return {
+		getPicture: function(options) {
+			var deferred = $q.defer();
+			navigator.camera.getPicture(function(result) {
+				// do any magic you need
+				deferred.resolve(result);
+			}, function(err) {
+				deferred.reject(err);
+			}, options);
+			return deferred.promise;
+		}
+	}
+});
+
+// "Add issue" controler 
+
+issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, apiUrl, $state, $scope, qimgUrl, qimgToken) {
+	
+// fonction get issues id
+
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
 		console.log(issueTypes);
 		$scope.issueTypes = issueTypes;
 	});
-/*
+
+	$scope.descr = '';
+	
+	// fonction apareil photo 
+  $scope.takePic = function() {
+
 	CameraService.getPicture({
 		quality: 75,
 		targetWidth: 400,
 		targetHeight: 300,
 		destinationType: Camera.DestinationType.DATA_URL
 	}).then(function(imageData) {
-		// do something with imageData
+		
+		$http({
+       method: "POST",
+       url: qimgUrl + "/images",
+       headers: {
+        Authorization: "Bearer " + qimgToken
+       },
+       data: {
+        data: imageData
+       }
+     	}).success(function(data) {
+       			var imageUrl = data.url;
+       			
+		   });
 	});
-*/
-});
+ };
+
+ $scope.newIssue = function() {
+ 	var description = $scope.descr;
+ 	console.log(description);
+
+ };
+
+}); // fin du controlleur addIssueCtrl
+
+
+
+
+
+
 issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
 	var userIssueList = IssueService.getUserIssues();
 	userIssueList.success(function(issues) {
@@ -90,7 +144,12 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $st
 		});
 	};
 });
+
+
+
 issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl, $scope, $stateParams) {
+	
+	
 	var issueID = $stateParams.issueId;
 	var issueDetails = IssueService.getIssue(issueID);
 	issueDetails.success(function(issueDetails) {
@@ -100,6 +159,7 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 	});
 	$scope.addComment = function(newComment) {
 		var commentTxt = $scope.newComment;
+
 		var postComment = IssueService.postComment(issueID, commentTxt);
 		postComment.success(function(issue) {
 			$scope.newComment = null;
@@ -107,6 +167,7 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 		});
 	}
 });
+
 issues.factory('IssueService', function($http, apiUrl) {
 	return {
 		getIssue: function(id) {
@@ -156,20 +217,7 @@ issues.factory('IssueService', function($http, apiUrl) {
 		}
 	}
 });
-issues.factory("CameraService", function($q) {
-	return {
-		getPicture: function(options) {
-			var deferred = $q.defer();
-			navigator.camera.getPicture(function(result) {
-				// do any magic you need
-				deferred.resolve(result);
-			}, function(err) {
-				deferred.reject(err);
-			}, options);
-			return deferred.promise;
-		}
-	}
-});
+
 issues.filter('capitalize', function() {
 	return function(input) {
 		return input.charAt(0).toUpperCase() + input.slice(1);

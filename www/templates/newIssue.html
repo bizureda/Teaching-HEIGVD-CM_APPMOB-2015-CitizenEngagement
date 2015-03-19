@@ -6,18 +6,18 @@
 					<div class="input-label">
 						Issue :
 					</div>
-					<select>
+					<select required="required">
 						<option ng-repeat="issueType in issueTypes" value="{{issueType.id}}">{{issueType.name | capitalize}}</option>
 					</select>
 				</label>
 				<label class="item item-input">
-					<textarea placeholder="Description"></textarea>
+					<textarea placeholder="Description" ng-model="$parent.descr" required="required"></textarea>
 				</label>
 				<label class="item item-input">
-					<button class="button icon ion-camera"></button>
+					<button ng-click="takePic()" class="button icon ion-camera" ></button>
 				</label>
 				<p ng-if="error" class="error">{{ error }}</p>
-				<button class="button button-large button-full button-positive" ng-click="addComment()" ng-disabled="issueForm.$invalid">Report issue</button>
+				<button class="button button-large button-full button-positive" ng-click="newIssue()" ng-disabled="issueForm.$invalid">Report issue</button>
 			
 			</div>
 		</form>
