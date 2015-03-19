@@ -4,7 +4,6 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 	// Fonction qui permet d'afficher et de cacher les markers
 	$scope.allMarkers = function() {
 		$scope.markersActive = !$scope.markersActive;
-		console.log($scope.markersActive);
 		if ($scope.markersActive) {
 			$scope.markerClass = 'button-positive';
 		} else {
