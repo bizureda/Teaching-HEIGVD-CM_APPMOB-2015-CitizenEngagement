@@ -4,6 +4,7 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 	issueList.success(function(issues) {
 		$scope.issues = issues;
 		$scope.listLoaded = true;
+		$scope.startY=96;
 	});
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
@@ -27,40 +28,40 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 	};
 	$scope.setOrder = function(order) {
 		$scope.order = order;
-		console.log($scope.order);
+
 	};
 	$scope.togRecent = function(ord) {
 		$scope.ownerOrd = '';
 		$scope.stateOrd = '';
 		if ($scope.reverse) {
-			$scope.recentOrd = 'ion-chevron-up'
-		} else {
 			$scope.recentOrd = 'ion-chevron-down'
+		} else {
+			$scope.recentOrd = 'ion-chevron-up'
 		}
 	};
 	$scope.togOwner = function(ord) {
 		$scope.recentOrd = '';
 		$scope.stateOrd = '';
 		if ($scope.reverse) {
-			$scope.ownerOrd = 'ion-chevron-up'
-		} else {
 			$scope.ownerOrd = 'ion-chevron-down'
+		} else {
+			$scope.ownerOrd = 'ion-chevron-up'
 		}
 	};
 	$scope.togState = function(ord) {
 		$scope.recentOrd = '';
 		$scope.ownerOrd = '';
 		if ($scope.reverse) {
-			$scope.stateOrd = 'ion-chevron-up'
-		} else {
 			$scope.stateOrd = 'ion-chevron-down'
+		} else {
+			$scope.stateOrd = 'ion-chevron-up'
 		}
 	};
 });
 issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, apiUrl, $state, $scope) {
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
-		console.log(issueTypes);
+
 		$scope.issueTypes = issueTypes;
 	});
 /*
