@@ -1,11 +1,23 @@
 var issues = angular.module('citizen.issues', []);
 issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
-	var issueList = IssueService.getIssues();
+	$scope.page=0;
+	var issueList = IssueService.getIssues($scope.page);
 	issueList.success(function(issues) {
 		$scope.issues = issues;
 		$scope.listLoaded = true;
-		$scope.startY=96;
+
+		$scope.page++;
 	});
+	$scope.noMoreItemsAvailable = false;
+	$scope.loadMore=function(){
+		var issueList = IssueService.getIssues($scope.page);
+		issueList.success(function(issues) {
+
+			$scope.issues = $scope.issues.concat(issues);
+			$scope.$broadcast('scroll.infiniteScrollComplete');
+			$scope.page++;
+		});
+	};
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
 		$scope.issueTypes = issueTypes;
@@ -108,23 +120,39 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 		});
 	}
 });
+issues.directive('actualSrc', function () {
+    return{
+        link: function postLink(scope, element, attrs) {
+            attrs.$observe('actualSrc', function(newVal, oldVal){
+                 if(newVal != undefined){
+                     var img = new Image();
+                     img.src = attrs.actualSrc;
+                     angular.element(img).bind('load', function () {
+                         element.attr("src", attrs.actualSrc);
+                     });
+                 }
+            });
+
+        }
+    }
+});
 issues.factory('IssueService', function($http, apiUrl) {
 	return {
+		getIssues: function(p) {
+			return $http({
+				method: 'GET',
+				url: apiUrl + '/issues',
+				headers: {
+					'x-pagination': p+';10'
+				}
+			})
+		},
 		getIssue: function(id) {
 			return $http({
 				method: 'GET',
 				url: apiUrl + '/issues/' + id,
 				headers: {
 					'x-sort': 'postedOn'
-				}
-			})
-		},
-		getIssues: function() {
-			return $http({
-				method: 'GET',
-				url: apiUrl + '/issues',
-				headers: {
-					'x-sort': 'updatedOn'
 				}
 			})
 		},

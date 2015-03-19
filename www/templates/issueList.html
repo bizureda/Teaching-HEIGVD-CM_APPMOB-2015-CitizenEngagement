@@ -1,5 +1,5 @@
 <ion-view view-title="Issue List">
-	<ion-content start-y="{{startY}}">
+	<ion-content>
 		<ion-list ng-controller="issueListCtrl">
 			<form ng-show="listLoaded" name="searchForm">
 				<div class="list">
@@ -26,7 +26,7 @@
 				</button>
 			</div>
 			<ion-item ng-repeat="issue in issues | filter:search | orderBy:predicate:reverse" class="item-thumbnail-left">
-					<img ng-src="{{issue.imageUrl}}" fall-back-src="img/3DflatCity.png">
+					<img actual-src="{{issue.imageUrl}}" ng-src="img/3DflatCity.png">
 					<h2>{{issue.issueType.name | capitalize}}</h2>
 					<p>{{issue.description}}</p>
 					<p style="font-size: small; font-style: italic">Reported by {{issue.owner.name}}</p>
@@ -37,7 +37,8 @@
 					<ion-option-button class="button-calm" ng-click="showDetails('{{issue.id}}')">
 						View details
 					</ion-option-button>
-			</ion-item>          
+			</ion-item>   
+			<ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
 		</ion-list>
 	</ion-content>
 </ion-view>

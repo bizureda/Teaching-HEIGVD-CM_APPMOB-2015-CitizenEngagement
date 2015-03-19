@@ -9,7 +9,6 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 		} else {
 			$scope.markerClass = null;
 		}
-		console.log($scope.markerClass);
 		if (top == true) {
 			top = false;
 		} else {
