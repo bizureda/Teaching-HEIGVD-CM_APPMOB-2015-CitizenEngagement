@@ -1,12 +1,23 @@
-<ion-popover-view view-title="New Issue">
+<ion-popover-view view-title="New Issue" ng-controller="addIssueCtrl">
 	<ion-content>
 		<form name="issueForm">
 			<div class="list">
+				<label class="item item-input item-select">
+					<div class="input-label">
+						Issue :
+					</div>
+					<select>
+						<option ng-repeat="issueType in issueTypes" value="{{issueType.id}}">{{issueType.name | capitalize}}</option>
+					</select>
+				</label>
 				<label class="item item-input">
-					<input type="text" placeholder="Blu" ng-model="newComment" required="required"/>
+					<textarea placeholder="Description"></textarea>
+				</label>
+				<label class="item item-input">
+					<button class="button icon ion-camera"></button>
 				</label>
 				<p ng-if="error" class="error">{{ error }}</p>
-				<button class="button button-small button-full button-positive" ng-click="addComment()" ng-disabled="commentForm.$invalid">Add comment</button>
+				<button class="button button-large button-full button-positive" ng-click="addComment()" ng-disabled="issueForm.$invalid">Report issue</button>
 			
 			</div>
 		</form>

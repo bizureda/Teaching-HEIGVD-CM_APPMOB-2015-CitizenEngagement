@@ -1,10 +1,13 @@
 var issues = angular.module('citizen.issues', []);
-issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state, $scope, $ionicScrollDelegate) {
+issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
 	var issueList = IssueService.getIssues();
 	issueList.success(function(issues) {
 		$scope.issues = issues;
 		$scope.listLoaded = true;
-		
+	});
+	var issueTypes = IssueService.getIssueTypes();
+	issueTypes.success(function(issueTypes) {
+		$scope.issueTypes = issueTypes;
 	});
 	$scope.showOnMap = function(issue) {
 		$state.go("tab.issueMap", {
@@ -53,6 +56,23 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 			$scope.stateOrd = 'ion-chevron-down'
 		}
 	};
+});
+issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, apiUrl, $state, $scope) {
+	var issueTypes = IssueService.getIssueTypes();
+	issueTypes.success(function(issueTypes) {
+		console.log(issueTypes);
+		$scope.issueTypes = issueTypes;
+	});
+/*
+	CameraService.getPicture({
+		quality: 75,
+		targetWidth: 400,
+		targetHeight: 300,
+		destinationType: Camera.DestinationType.DATA_URL
+	}).then(function(imageData) {
+		// do something with imageData
+	});
+*/
 });
 issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
 	var userIssueList = IssueService.getUserIssues();
@@ -107,6 +127,12 @@ issues.factory('IssueService', function($http, apiUrl) {
 				}
 			})
 		},
+		getIssueTypes: function() {
+			return $http({
+				method: 'GET',
+				url: apiUrl + '/issueTypes'
+			})
+		},
 		getUserIssues: function() {
 			return $http({
 				method: 'GET',
@@ -127,6 +153,20 @@ issues.factory('IssueService', function($http, apiUrl) {
 					}
 				}
 			})
+		}
+	}
+});
+issues.factory("CameraService", function($q) {
+	return {
+		getPicture: function(options) {
+			var deferred = $q.defer();
+			navigator.camera.getPicture(function(result) {
+				// do any magic you need
+				deferred.resolve(result);
+			}, function(err) {
+				deferred.reject(err);
+			}, options);
+			return deferred.promise;
 		}
 	}
 });
