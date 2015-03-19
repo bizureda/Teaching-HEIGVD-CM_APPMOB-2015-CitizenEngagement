@@ -99,7 +99,7 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 		$scope.issueTypes = issueTypes;
 	});
 
-	$scope.descr = '';
+	
 	
 	// fonction apareil photo 
   $scope.takePic = function() {
@@ -122,14 +122,53 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
        }
      	}).success(function(data) {
        			var imageUrl = data.url;
-       			
+       			$scope = imageUrl;
 		   });
 	});
  };
 
  $scope.newIssue = function() {
  	var description = $scope.descr;
+ 	var issueTypeId = $scope.issueTypeId;
+ 	var imageUrl = $scope.imageUrl;
+ 	var lat = $scope.crd.latitude;
+ 	var lng = $scope.crd.longitude;
+
+ 	navigator.geolocation.getCurrentPosition(success, error, options);
+ 	
+ 	var options = {
+  		enableHighAccuracy: true,
+  		timeout: 5000,
+  		maximumAge: 0
+	};
+
+	function success(pos) {
+  		var crd = pos.coords;
+  		$scope = crd.latitude;
+  		$scope = crd.longitude;
+	};
+
+	function error(err) {
+  		console.warn('ERROR(' + err.code + '): ' + err.message);
+	};
+
+	
+
+	var postIssue = IssueService.postIssue(description, lng, lat, imageUrl, issueTypeId);
+		postIssue.success(function(issue) {
+			console.log(issue);
+		});
+
+
+
+
  	console.log(description);
+ 	console.log(issueTypeId);
+ 	console.log(imageUrl);
+ 	console.log(lat);
+ 	console.log(lng);
+
+
 
  };
 
@@ -261,6 +300,20 @@ issues.factory('IssueService', function($http, apiUrl) {
 					"payload": {
 						"text": txt
 					}
+				}
+			})
+		},
+		postIssue: function(description, lng, lat, imageUrl, issueTypeId) {
+			return $http({
+				method: 'POST',
+				url: apiUrl + '/issues',
+				data: {
+					"description":description,
+					"lng":lng,
+					"lat":lat,
+					"imageUrl":imageUrl,
+					"issueTypeId":issueTypeId 
+					
 				}
 			})
 		}

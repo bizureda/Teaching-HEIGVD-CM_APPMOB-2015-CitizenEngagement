@@ -72,6 +72,8 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 
 	function mypos(pos) {
 		var crd = pos.coords;
+		$scope.crd = crd; 
+
 		$scope.mapMarkers.push({
 			lat: crd.latitude,
 			lng: crd.longitude,
@@ -81,6 +83,8 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 			}
 		});
 	};
+
+	
 	// Show an issue sur la map depuis la liste des issues           
 	$scope.$on('$ionicView.beforeEnter', function() {
 		var issueID = $stateParams.issueId;

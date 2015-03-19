@@ -6,8 +6,8 @@
 					<div class="input-label">
 						Issue :
 					</div>
-					<select required="required">
-						<option ng-repeat="issueType in issueTypes" value="{{issueType.id}}">{{issueType.name | capitalize}}</option>
+					<select ng-model="$parent.issueTypeId" required="required">
+						<option ng-repeat="issueType in issueTypes"  value="{{issueType.id}}">{{issueType.name | capitalize}}</option>
 					</select>
 				</label>
 				<label class="item item-input">
