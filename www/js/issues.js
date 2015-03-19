@@ -88,10 +88,21 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 */
 });
 issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
-	var userIssueList = IssueService.getUserIssues();
+	$scope.page=0;
+	var userIssueList = IssueService.getUserIssues($scope.page);
 	userIssueList.success(function(issues) {
 		$scope.userIssues = issues;
 	});
+	$scope.noMoreItemsAvailable = false;
+	$scope.loadMore=function(){
+		var userIssueList = IssueService.getUserIssues($scope.page);
+		userIssueList.success(function(issues) {
+
+			$scope.userIssues = $scope.userIssues.concat(issues);
+			$scope.$broadcast('scroll.infiniteScrollComplete');
+			$scope.page++;
+		});
+	};
 	$scope.showOnMap = function(issue) {
 		$state.go("tab.issueMap", {
 			issueId: issue
@@ -162,12 +173,13 @@ issues.factory('IssueService', function($http, apiUrl) {
 				url: apiUrl + '/issueTypes'
 			})
 		},
-		getUserIssues: function() {
+		getUserIssues: function(p) {
 			return $http({
 				method: 'GET',
 				url: apiUrl + '/me/issues',
 				headers: {
-					'x-sort': 'updatedOn'
+					'x-sort': 'updatedOn',
+					'x-pagination': p+';10'
 				}
 			})
 		},
