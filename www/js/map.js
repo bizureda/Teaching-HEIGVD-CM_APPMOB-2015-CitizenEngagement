@@ -23,7 +23,9 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 				angular.forEach(issueList, function(value, key) {
 					$scope.mapMarkers.push({
 						lat: value.lat,
-						lng: value.lng
+						lng: value.lng,
+						message : value.issueType.name
+// 						message: "<a ui-sref=\"tab.mapIssueDetails({issueId:'" + value.id + "'})\">" + value.issueType.name + "</a>"
 					})
 				});
 			});
@@ -61,8 +63,8 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 		tileLayer: mapboxTileLayer
 	};
 	$scope.mapCenter = {
-		lat: 51.48,
-		lng: 0,
+		lat: 46.778571,
+		lng: 6.640916,
 		zoom: 14
 	};
 	$scope.mapMarkers = [];

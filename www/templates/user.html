@@ -19,7 +19,7 @@
     </div>
     <div class="row" ng-controller="userIssueListCtrl">
 		<ion-list ng-if="userIssues">
-			<ion-item ng-repeat="userIssue in userIssues" class="item-thumbnail-left">		
+			<ion-item ng-repeat="userIssue in userIssues track by $index" class="item-thumbnail-left">		
 				<img actual-src="{{userIssue.imageUrl}}" ng-src="img/3DflatCity.png">
 				<h2>{{userIssue.issueType.name | capitalize}}</h2>
 				<p>{{userIssue.description}}</p>
