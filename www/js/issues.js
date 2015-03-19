@@ -121,8 +121,8 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
         data: imageData
        }
      	}).success(function(data) {
-       			var imageUrl = data.url;
-       			$scope = imageUrl;
+       			var img = data.url;
+       			$scope = img;
 		   });
 	});
  };
@@ -130,7 +130,8 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
  $scope.newIssue = function() {
  	var description = $scope.descr;
  	var issueTypeId = $scope.issueTypeId;
- 	var imageUrl = $scope.imageUrl;
+ 	// var imageUrl = $scope.img;
+ 	var imageUrl = "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png";
  	var lat = $scope.crd.latitude;
  	var lng = $scope.crd.longitude;
 
@@ -153,15 +154,14 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 	};
 
 	
-
+	// le post ne marche pas sur phone
 	var postIssue = IssueService.postIssue(description, lng, lat, imageUrl, issueTypeId);
 		postIssue.success(function(issue) {
-			console.log(issue);
+			
 		});
+	$scope.popover.hide();	
 
-
-
-
+	
  	console.log(description);
  	console.log(issueTypeId);
  	console.log(imageUrl);
