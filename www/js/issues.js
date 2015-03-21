@@ -104,6 +104,8 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 	// fonction apareil photo 
   $scope.takePic = function() {
 
+  	// console.log("photo");
+
 	CameraService.getPicture({
 		quality: 75,
 		targetWidth: 400,
@@ -118,11 +120,13 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
         Authorization: "Bearer " + qimgToken
        },
        data: {
-        data: imageData
+       data: imageData
+        // data: "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png"
        }
      	}).success(function(data) {
        			var img = data.url;
-       			$scope = img;
+       			$scope.img = img;
+       			// console.log($scope.img);
 		   });
 	});
  };
@@ -134,6 +138,7 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
  	// var imageUrl = "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png";
  	var lat = $scope.crd.latitude;
  	var lng = $scope.crd.longitude;
+
 
  	navigator.geolocation.getCurrentPosition(success, error, options);
  	
@@ -162,11 +167,11 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
 	$scope.popover.hide();	
 
 	
- 	console.log(description);
- 	console.log(issueTypeId);
- 	console.log(imageUrl);
- 	console.log(lat);
- 	console.log(lng);
+ 	// console.log(description);
+ 	// console.log(issueTypeId);
+ 	// console.log(imageUrl);
+ 	// console.log(lat);
+ 	// console.log(lng);
 
 
 
