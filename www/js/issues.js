@@ -130,8 +130,8 @@ issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, a
  $scope.newIssue = function() {
  	var description = $scope.descr;
  	var issueTypeId = $scope.issueTypeId;
- 	// var imageUrl = $scope.img;
- 	var imageUrl = "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png";
+ 	var imageUrl = $scope.img;
+ 	// var imageUrl = "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png";
  	var lat = $scope.crd.latitude;
  	var lng = $scope.crd.longitude;
 

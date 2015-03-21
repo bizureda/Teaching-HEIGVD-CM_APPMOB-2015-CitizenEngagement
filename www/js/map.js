@@ -5,6 +5,11 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 	$scope.allMarkers = function() {
 		$scope.markersActive = !$scope.markersActive;
 
+		
+ 
+ 
+
+
 		if ($scope.markersActive) {
 			$scope.markerClass = '-disabled';
 		} else {
