@@ -193,10 +193,12 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $st
 			$scope.userIssues = false;
 		}else{
 			$scope.userIssues = issues;
+			console.log("chargement");
 		}
 	});
 	$scope.noMoreItemsAvailable = false;
 	$scope.loadMore = function() {
+		console.log("chargement2");
 		var userIssueList = IssueService.getUserIssues($scope.page);
 		userIssueList.success(function(issues) {
 			if(issues.length<10){
