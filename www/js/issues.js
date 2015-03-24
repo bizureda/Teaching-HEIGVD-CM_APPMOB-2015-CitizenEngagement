@@ -3,26 +3,57 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 	$scope.page = 0;
 	var issueList = IssueService.getIssues($scope.page);
 	issueList.success(function(issues) {
-		$scope.issues = issues;
-		$scope.listLoaded = true;
-		$scope.page++;
+		console.log(issues.length);
+		if (issues.length == 0) {
+			$scope.noMoreItemsAvailable = true;
+			$scope.issues = false;
+			$scope.listLoaded = true;
+		} else {
+			if (issues.length < 10) {
+				$scope.noMoreItemsAvailable = true;
+			}
+			$scope.issues = issues;
+			$scope.listLoaded = true;
+			$scope.page++;
+		}
+		console.log($scope.noMoreItemsAvailable);
 	});
 	$scope.noMoreItemsAvailable = false;
 	$scope.loadMore = function() {
-		var issueList = IssueService.getIssues($scope.page);
-		issueList.success(function(issues) {
-			if(issues.length<10){
-				$scope.noMoreItemsAvailable=true;
-			}
-			$scope.issues = $scope.issues.concat(issues);
-			$scope.$broadcast('scroll.infiniteScrollComplete');
-			$scope.page++;
-		});
+		if (!$scope.noMoreItemsAvailable) {
+			var issueList = IssueService.getIssues($scope.page);
+			issueList.success(function(issues) {
+				if (issues.length < 10) {
+					$scope.noMoreItemsAvailable = true;
+				}
+				$scope.issues = $scope.issues.concat(issues);
+				$scope.$broadcast('scroll.infiniteScrollComplete');
+				$scope.page++;
+			});
+		}
 	};
+/*
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
 		$scope.issueTypes = issueTypes;
 	});
+*/
+	$scope.doRefresh = function() {
+		var issueList = IssueService.getIssues($scope.page);
+		issueList.success(function(issues) {
+			$scope.$broadcast('scroll.refreshComplete');
+			if (issues.length == 0) {
+				$scope.noMoreItemsAvailable = true;
+				$scope.issues = false;
+			} else {
+				if (issues.length < 10) {
+					$scope.noMoreItemsAvailable = true;
+				}
+				$scope.issues = issues;
+				$scope.page++;
+			}
+		});
+	};
 	$scope.showOnMap = function(issue) {
 		$state.go("tab.issueMap", {
 			issueId: issue
@@ -70,9 +101,6 @@ issues.controller('issueListCtrl', function(IssueService, $http, apiUrl, $state,
 		}
 	};
 });
-
-
-
 issues.factory("CameraService", function($q) {
 	return {
 		getPicture: function(options) {
@@ -87,128 +115,118 @@ issues.factory("CameraService", function($q) {
 		}
 	}
 });
-
 // "Add issue" controler 
-
 issues.controller('addIssueCtrl', function(IssueService, CameraService, $http, apiUrl, $state, $scope, qimgUrl, qimgToken) {
-	
-// fonction get issues id
-
+	// fonction get issues id
 	var issueTypes = IssueService.getIssueTypes();
 	issueTypes.success(function(issueTypes) {
 		$scope.issueTypes = issueTypes;
 	});
-
-	
-	
 	// fonction apareil photo 
-  $scope.takePic = function() {
-
-  	// console.log("photo");
-
-	CameraService.getPicture({
-		quality: 75,
-		targetWidth: 400,
-		targetHeight: 300,
-		destinationType: Camera.DestinationType.DATA_URL
-	}).then(function(imageData) {
-		
-		$http({
-       method: "POST",
-       url: qimgUrl + "/images",
-       headers: {
-        Authorization: "Bearer " + qimgToken
-       },
-       data: {
-       data: imageData
-        // data: "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png"
-       }
-     	}).success(function(data) {
-       			var img = data.url;
-       			$scope.img = img;
-       			// console.log($scope.img);
-		   });
-	});
- };
-
- $scope.newIssue = function() {
- 	var description = $scope.descr;
- 	var issueTypeId = $scope.issueTypeId;
- 	var imageUrl = $scope.img;
- 	// var imageUrl = "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png";
- 	var lat = $scope.crd.latitude;
- 	var lng = $scope.crd.longitude;
-
-
- 	navigator.geolocation.getCurrentPosition(success, error, options);
- 	
- 	var options = {
-  		enableHighAccuracy: true,
-  		timeout: 5000,
-  		maximumAge: 0
-	};
-
-	function success(pos) {
-  		var crd = pos.coords;
-  		$scope = crd.latitude;
-  		$scope = crd.longitude;
-	};
-
-	function error(err) {
-  		console.warn('ERROR(' + err.code + '): ' + err.message);
-	};
-
-	
-	// le post ne marche pas sur phone
-	var postIssue = IssueService.postIssue(description, lng, lat, imageUrl, issueTypeId);
-		postIssue.success(function(issue) {
-			
+	$scope.takePic = function() {
+		// console.log("photo");
+		CameraService.getPicture({
+			quality: 75,
+			targetWidth: 400,
+			targetHeight: 300,
+			destinationType: Camera.DestinationType.DATA_URL
+		}).then(function(imageData) {
+			$http({
+				method: "POST",
+				url: qimgUrl + "/images",
+				headers: {
+					Authorization: "Bearer " + qimgToken
+				},
+				data: {
+					data: imageData
+					// data: "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png"
+				}
+			}).success(function(data) {
+				var img = data.url;
+				$scope.img = img;
+				// console.log($scope.img);
+			});
 		});
-	$scope.popover.hide();	
+	};
+	$scope.newIssue = function() {
+		var description = $scope.descr;
+		var issueTypeId = $scope.issueTypeId;
+		var imageUrl = $scope.img;
+		// var imageUrl = "https://warm-bastion-3094.herokuapp.com/images/27720a13-a316-4023-8039-cff8058854b9.png";
+		var lat = $scope.crd.latitude;
+		var lng = $scope.crd.longitude;
+		navigator.geolocation.getCurrentPosition(success, error, options);
+		var options = {
+			enableHighAccuracy: true,
+			timeout: 5000,
+			maximumAge: 0
+		};
 
-	
- 	// console.log(description);
- 	// console.log(issueTypeId);
- 	// console.log(imageUrl);
- 	// console.log(lat);
- 	// console.log(lng);
+		function success(pos) {
+			var crd = pos.coords;
+			$scope = crd.latitude;
+			$scope = crd.longitude;
+		};
 
-
-
- };
-
+		function error(err) {
+			console.warn('ERROR(' + err.code + '): ' + err.message);
+		};
+		var postIssue = IssueService.postIssue(description, lng, lat, imageUrl, issueTypeId);
+		postIssue.success(function(issue) {});
+		$scope.popover.hide();
+		// console.log(description);
+		// console.log(issueTypeId);
+		// console.log(imageUrl);
+		// console.log(lat);
+		// console.log(lng);
+	};
 }); // fin du controlleur addIssueCtrl
-
-
-
-
-
-
 issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $state, $scope) {
 	$scope.page = 0;
 	var userIssueList = IssueService.getUserIssues($scope.page);
 	userIssueList.success(function(issues) {
-		if(issues.length==0){
-			$scope.noMoreItemsAvailable=true;
+		if (issues.length == 0) {
+			$scope.noMoreItemsAvailable = true;
 			$scope.userIssues = false;
-		}else{
+		} else {
+			if (issues.length < 10) {
+				$scope.noMoreItemsAvailable = true;
+			}
 			$scope.userIssues = issues;
-			console.log("chargement");
+			$scope.page++;
+			console.log(issues);
 		}
 	});
 	$scope.noMoreItemsAvailable = false;
 	$scope.loadMore = function() {
-		console.log("chargement2");
+		if (!$scope.noMoreItemsAvailable) {
+			var userIssueList = IssueService.getUserIssues($scope.page);
+			userIssueList.success(function(issues) {
+				if (issues.length < 10) {
+					$scope.noMoreItemsAvailable = true;
+				}
+				$scope.userIssues = $scope.userIssues.concat(issues);
+				$scope.$broadcast('scroll.infiniteScrollComplete');
+				$scope.page++;
+			});
+		}
+	};
+	$scope.doRefresh = function() {
 		var userIssueList = IssueService.getUserIssues($scope.page);
 		userIssueList.success(function(issues) {
-			if(issues.length<10){
-				$scope.noMoreItemsAvailable=true;
+			console.log(issues);
+			$scope.$broadcast('scroll.refreshComplete');
+			if (issues.length == 0) {
+				$scope.noMoreItemsAvailable = true;
+				$scope.userIssues = false;
+			} else {
+				if (issues.length < 10) {
+					$scope.noMoreItemsAvailable = true;
+				}
+				$scope.userIssues = issues;
+				$scope.page++;
+				console.log(issues);
 			}
-			$scope.userIssues = issues;
-			$scope.userIssues = $scope.userIssues.concat(issues);
-			$scope.$broadcast('scroll.infiniteScrollComplete');
-			$scope.page++;
-			
 		});
 	};
 	$scope.showOnMap = function(issue) {
@@ -222,12 +240,7 @@ issues.controller('userIssueListCtrl', function(IssueService, $http, apiUrl, $st
 		});
 	};
 });
-
-
-
 issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl, $scope, $stateParams) {
-	
-	
 	var issueID = $stateParams.issueId;
 	var issueDetails = IssueService.getIssue(issueID);
 	issueDetails.success(function(issueDetails) {
@@ -237,7 +250,6 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 	});
 	$scope.addComment = function(newComment) {
 		var commentTxt = $scope.newComment;
-
 		var postComment = IssueService.postComment(issueID, commentTxt);
 		postComment.success(function(issue) {
 			$scope.newComment = null;
@@ -245,7 +257,6 @@ issues.controller("IssueDetailsController", function(IssueService, $http, apiUrl
 		});
 	}
 });
-
 issues.directive('actualSrc', function() {
 	return {
 		link: function postLink(scope, element, attrs) {
@@ -261,7 +272,6 @@ issues.directive('actualSrc', function() {
 		}
 	}
 });
-
 issues.factory('IssueService', function($http, apiUrl) {
 	return {
 		getIssues: function(p) {
@@ -315,18 +325,16 @@ issues.factory('IssueService', function($http, apiUrl) {
 				method: 'POST',
 				url: apiUrl + '/issues',
 				data: {
-					"description":description,
-					"lng":lng,
-					"lat":lat,
-					"imageUrl":imageUrl,
-					"issueTypeId":issueTypeId 
-					
+					"description": description,
+					"lng": lng,
+					"lat": lat,
+					"imageUrl": imageUrl,
+					"issueTypeId": issueTypeId
 				}
 			})
 		}
 	}
 });
-
 issues.filter('capitalize', function() {
 	return function(input) {
 		return input.charAt(0).toUpperCase() + input.slice(1);

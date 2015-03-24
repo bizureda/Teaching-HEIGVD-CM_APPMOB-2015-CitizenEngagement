@@ -29,8 +29,8 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 					$scope.mapMarkers.push({
 						lat: value.lat,
 						lng: value.lng,
-						message : value.issueType.name
-// 						message: "<a ui-sref=\"tab.mapIssueDetails({issueId:'" + value.id + "'})\">" + value.issueType.name + "</a>"
+// 						message : value.issueType.name
+						message: "<button class=\"button button-small button-assertive\" ui-sref=\"tab.mapIssueDetails/" + value.id + "\">" + value.issueType.name.charAt(0).toUpperCase() + value.issueType.name.slice(1) + "</button>"
 					})
 				});
 			});
@@ -112,15 +112,5 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 		scope: $scope,
 	}).then(function(popover) {
 		$scope.popover = popover;
-	});
-	$scope.openPopover = function($event) {
-		$scope.popover.show($event);
-	};
-	$scope.closePopover = function() {
-		$scope.popover.hide();
-	};
-	//Cleanup the popover when we're done with it!
-	$scope.$on('$destroy', function() {
-		$scope.popover.remove();
 	});
 })

@@ -1,6 +1,10 @@
 <ion-view view-title="Issue List">
 	<ion-content>
-		<ion-list ng-controller="issueListCtrl">
+	<ion-refresher
+		pulling-text="Pull to refresh..."
+		on-refresh="doRefresh()" ng-controller="issueListCtrl">
+	</ion-refresher>
+		<ion-list ng-controller="issueListCtrl" ng-if="issues">
 			<form ng-show="listLoaded" name="searchForm">
 				<div class="list">
 					<div class="bar bar-header item-input-inset">
@@ -40,5 +44,10 @@
 			</ion-item>   
 			<ion-infinite-scroll ng-if="!noMoreItemsAvailable" on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
 		</ion-list>
+		<div ng-if="!issues" class="card">
+			<div class="item item-text-wrap">
+				No issues have been reported yet.
+			</div>
+		</div>
 	</ion-content>
 </ion-view>
