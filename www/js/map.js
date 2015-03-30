@@ -30,7 +30,8 @@ angular.module('citizen-engagement.map', ['citizen.issues']).controller("MapCont
 						lat: value.lat,
 						lng: value.lng,
 // 						message : value.issueType.name
-						message: "<button class=\"button button-small button-assertive\" ui-sref=\"tab.mapIssueDetails/" + value.id + "\">" + value.issueType.name.charAt(0).toUpperCase() + value.issueType.name.slice(1) + "</button>"
+// 						message: "<button class=\"button button-small button-assertive\" ui-sref=\"tab.mapIssueDetails({issueId:'" + value.id + "'})\">" + value.issueType.name.charAt(0).toUpperCase() + value.issueType.name.slice(1) + "</button>"
+						message : "<p>" + data[i].description + "</p>"
 					})
 				});
 			});
